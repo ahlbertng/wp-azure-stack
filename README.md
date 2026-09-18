@@ -14,13 +14,13 @@ Reusable Docker + Terraform setup for deploying self hosted WordPress sites on A
 - Domain name (for DNS/SSL)
 
 ## Usage
-1. Clone the repo
-2. Copy `.env.example` to `.env` and fill in your values (site name, DB credentials, domain)
-3. Test locally:
+  Clone the repo
+  Copy `.env.example` to `.env` and fill in your values (site name, DB credentials, domain)
+  Test locally:
    \`\`\`bash
    docker-compose up -d
    \`\`\`
-4. Deploy to Azure:
+   Deploy to Azure:
    \`\`\`bash
    terraform init
    terraform apply
