@@ -1,10 +1,10 @@
 # WP Azure Stack
 
-Reusable Docker + Terraform setup for deploying self-hosted WordPress sites on Azure.
+Reusable Docker + Terraform setup for deploying self hosted WordPress sites on Azure.
 
 ## Stack
 - Docker Compose (WordPress + MySQL/MariaDB)
-- Terraform (Azure infrastructure provisioning)
+- Terraform (infrastructure provisioning)
 - [any other tools — Nginx, Certbot, etc.]
 
 ## Prerequisites
