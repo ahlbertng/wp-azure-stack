@@ -1,27 +1,41 @@
+name: wp-azure-stack
+
 services:
   db:
-    image: mysql:8.0
+    image: mysql:8.4
     restart: always
+
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?set in .env}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:?set in .env}
+      MYSQL_USER: ${MYSQL_USER:?set in .env}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?set in .env}
+
     volumes:
       - db_data:/var/lib/mysql
 
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p$$MYSQL_ROOT_PASSWORD"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   wordpress:
-    image: wordpress:latest
+    image: wordpress:7.1-php8.3-apache
     restart: always
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+
     ports:
-      - "8080:80"
+      - "${WP_PORT:-8080}:80"
+
     environment:
       WORDPRESS_DB_HOST: db:3306
-      WORDPRESS_DB_USER: ${MYSQL_USER}
-      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
-      WORDPRESS_DB_NAME: ${MYSQL_DATABASE}
+      WORDPRESS_DB_USER: ${MYSQL_USER:?set in .env}
+      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD:?set in .env}
+      WORDPRESS_DB_NAME: ${MYSQL_DATABASE:?set in .env}
+
     volumes:
       - wp_data:/var/www/html
 
