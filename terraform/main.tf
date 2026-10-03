@@ -82,6 +82,19 @@ resource "azurerm_linux_virtual_machine" "main" {
   disable_password_authentication = true
   network_interface_ids           = [azurerm_network_interface.main.id]
 
+  custom_data = base64encode(templatefile("${path.module}/cloud-init.yaml", {
+    mysql_root_password = random_password.mysql_root.result
+    mysql_password      = random_password.mysql_user.result
+    mysql_database      = "wordpress"
+    mysql_user          = "wpuser"
+    repo_url            = var.repo_url
+    repo_ref            = var.repo_ref
+  }))
+
+  lifecycle {
+    ignore_changes = [custom_data]
+  }
+
   admin_ssh_key {
     username   = var.admin_username
     public_key = file(var.ssh_public_key_path)
