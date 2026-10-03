@@ -99,3 +99,13 @@ resource "azurerm_linux_virtual_machine" "main" {
     version   = "latest"
   }
 }
+
+resource "random_password" "mysql_root" {
+  length  = 24
+  special = false
+}
+
+resource "random_password" "mysql_user" {
+  length  = 24
+  special = false
+}
