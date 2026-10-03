@@ -37,3 +37,15 @@ variable "admin_username" {
   type        = string
   default     = "azureuser"
 }
+
+variable "repo_url" {
+  description = "Git repo the VM clones on first boot"
+  type        = string
+  default     = "https://github.com/ahlbertng/wp-azure-stack.git"
+}
+
+variable "repo_ref" {
+  description = "Branch or tag to deploy"
+  type        = string
+  default     = "main"
+}
