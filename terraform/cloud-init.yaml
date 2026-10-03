@@ -1,0 +1,23 @@
+#cloud-config
+package_update: true
+packages:
+  - git
+  - docker.io
+  - docker-compose-v2
+
+write_files:
+  - path: /opt/wp-azure-stack.env
+    permissions: "0600"
+    owner: root:root
+    content: |
+      MYSQL_ROOT_PASSWORD=${mysql_root_password}
+      MYSQL_DATABASE=${mysql_database}
+      MYSQL_USER=${mysql_user}
+      MYSQL_PASSWORD=${mysql_password}
+      WP_PORT=80
+
+runcmd:
+  - systemctl enable --now docker
+  - git clone --branch ${repo_ref} --depth 1 ${repo_url} /opt/wp-azure-stack
+  - cp /opt/wp-azure-stack.env /opt/wp-azure-stack/docker/.env
+  - cd /opt/wp-azure-stack/docker && docker compose up -d
