@@ -17,6 +17,11 @@ write_files:
       WP_PORT=80
 
 runcmd:
+  - fallocate -l 2G /swapfile
+  - chmod 600 /swapfile
+  - mkswap /swapfile
+  - swapon /swapfile
+  - echo '/swapfile none swap sw 0 0' >> /etc/fstab
   - systemctl enable --now docker
   - git clone --branch ${repo_ref} --depth 1 ${repo_url} /opt/wp-azure-stack
   - cp /opt/wp-azure-stack.env /opt/wp-azure-stack/docker/.env
