@@ -3,7 +3,7 @@ name: ${COMPOSE_PROJECT_NAME:?set in .env}
 services:
 
   wordpress:
-    image: wordpress:6.4-php8.3-apache
+    image: wordpress:php8.4-apache
     restart: always
     ports:
       - "${WP_PORT:-8080}:80"
@@ -13,19 +13,14 @@ services:
       WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD:?set in .env}
       WORDPRESS_DB_NAME: ${MYSQL_DATABASE:?set in .env}
 
-      # =========================================================================
-      # MIGRATION ONLY: Overriding default PHP limits to allow large imports.
-      # If doing a fresh install with no backup file, you can completely safely 
-      # delete the WORDPRESS_CONFIG_EXTRA block below to revert to default limits.
-      # =========================================================================
-      
-      WORDPRESS_CONFIG_EXTRA: |
-        @ini_set( 'upload_max_filesize', '512M' );
-        @ini_set( 'post_max_size', '512M' );
-        @ini_set( 'memory_limit', '256M' );
-
     volumes:
       - wp_data:/var/www/html
+         # =========================================================================
+      # MIGRATION ONLY: Overriding PHP limits to allow large imports.
+      # You can safely delete or comment out the line below after migration.
+      # =========================================================================
+      - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+
     depends_on:
       db:
         condition: service_healthy
