@@ -16,10 +16,12 @@ services:
 
     volumes:
       - wp_data:/var/www/html
+
          # =========================================================================
       # MIGRATION ONLY: Overriding PHP limits to allow large imports.
       # You can safely delete or comment out the line below after migration.
       # =========================================================================
+      
       - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
 
     depends_on:
