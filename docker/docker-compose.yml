@@ -12,6 +12,18 @@ services:
       WORDPRESS_DB_USER: ${MYSQL_USER:?set in .env}
       WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD:?set in .env}
       WORDPRESS_DB_NAME: ${MYSQL_DATABASE:?set in .env}
+
+      # =========================================================================
+      # MIGRATION ONLY: Overriding default PHP limits to allow large imports.
+      # If doing a fresh install with no backup file, you can completely safely 
+      # delete the WORDPRESS_CONFIG_EXTRA block below to revert to default limits.
+      # =========================================================================
+      
+      WORDPRESS_CONFIG_EXTRA: |
+        @ini_set( 'upload_max_filesize', '512M' );
+        @ini_set( 'post_max_size', '512M' );
+        @ini_set( 'memory_limit', '256M' );
+
     volumes:
       - wp_data:/var/www/html
     depends_on:
