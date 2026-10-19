@@ -12,6 +12,7 @@ services:
       WORDPRESS_DB_USER: ${MYSQL_USER:?set in .env}
       WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD:?set in .env}
       WORDPRESS_DB_NAME: ${MYSQL_DATABASE:?set in .env}
+      WORDPRESS_CONFIG_EXTRA: "define('WP_REDIS_HOST', '${WP_REDIS_HOST}');"
 
     volumes:
       - wp_data:/var/www/html
